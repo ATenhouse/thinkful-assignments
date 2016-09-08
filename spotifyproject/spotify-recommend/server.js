@@ -8,7 +8,7 @@ var getFromApi = function(endpoint, args) {
            .qs(args)
            .end(function(response) {
                 if (response.ok) {
-                    emitter.emit('end', response.body);
+                    emitter.emit('return', response.body);
                 }
                 else {
                     emitter.emit('error', response.code);
@@ -19,7 +19,6 @@ var getFromApi = function(endpoint, args) {
 
 var getRelatedArtists = function(artistID, args) {
     var emitter = new events.EventEmitter();
-    console.log("https://api.spotify.com/v1/artists/" + artistID + '/related-artists');
     unirest.get('https://api.spotify.com/v1/artists/' + artistID + '/related-artists')
            .qs(args)
            .end(function(response) {
@@ -42,20 +41,22 @@ app.get('/search/:name', function(req, res) {
         limit: 1,
         type: 'artist'
     });
-    searchReq.on('end', function(item) {
+    searchReq.on('return', function(item) {
         var artist = item.artists.items[0];
-        console.log(artist.id);
         var related_artist = getRelatedArtists(artist.id);
 
         related_artist.on('end', function(item){
-            var related = item.artists;
+            // console.log("related artist ended.", item.artists)
+            artist.related = item.artists;
+            // console.log(artist);
+            res.json(artist);
         });
 
         related_artist.on('error', function(item){
             console.log("Error thrown:" + item);
+            // console.log(artist);
+            res.json(artist);
         });
-
-        res.json(artist);
     });
 
     searchReq.on('error', function(code) {
