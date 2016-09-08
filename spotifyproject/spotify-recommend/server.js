@@ -17,7 +17,7 @@ var getFromApi = function(endpoint, args) {
 
 var getTracks = function(artist, cb) {
     // Please note: Country is a REQUIRED parameter according to Spotify documentation
-    unirest.get('https://api.spotify.com/v1/artists/' + artist.id + '/top-tracks')
+    unirest.get("https://api.spotify.com/v1/artists/"+artist.id+"/top-tracks")
         .qs({country: "us"})
         .end(function(response) {
             if (!response.error) {
@@ -38,7 +38,7 @@ app.get('/search/:name', function(req, res) {
 
     searchReq.on('end', function(item) {
         var artist = item.artists.items[0];
-        unirest.get('https://api.spotify.com/v1/artists/' + artist.id + '/related-artists')
+        unirest.get("https://api.spotify.com/v1/artists/"+artist.id+"/related-artists")
             .end(function(response) {
                 if (!response.error) {
                     artist.related = response.body.artists;
@@ -55,17 +55,15 @@ app.get('/search/:name', function(req, res) {
                     artist.related.forEach(function(artist) {
                         getTracks(artist, function(err) {
                             if (err) {
-                                res.sendStatus(404);
+                                res.status(404).send("ERROR!");
                             }
-
-                            completed += 1;
+                            completed++;
                             checkComplete();
-
                         });
                     });
 
                 } else {
-                    res.sendStatus(404);
+                    res.status(404).send('404 error - not much fun');
                 }
 
             });
@@ -78,4 +76,6 @@ app.get('/search/:name', function(req, res) {
 
 });
 
-app.listen(3000);
+app.listen(3000, function(){
+    console.log("Server is running.");
+});
