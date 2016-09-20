@@ -15,7 +15,7 @@ io.on('connection', function (socket) {
     var full_name = "";
 
     socket.on('username', function(username) {
-        clients['count'] = clients['count'] + 1;
+        clients.count = clients.count + 1;
     	socket.broadcast.emit('message', username + ' has connected.');
         socket.broadcast.emit('clientsChanged', clients);
     });
@@ -26,7 +26,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function() {
-        clients['count'] = clients['count'] - 1;
+        clients.count = clients.count - 1;
         socket.broadcast.emit('message', 'Someone has disconnected.');
         io.emit('clientsChanged', clients);
     });
