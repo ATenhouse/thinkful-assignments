@@ -8,19 +8,29 @@ app.use(express.static('public'));
 var server = http.Server(app);
 var io = socket_io(server);
 
+var clients = {count: 0};
+
 io.on('connection', function (socket) {
     console.log('Client connected');
     var full_name = "";
 
     socket.on('username', function(username) {
     	full_name = username;
+        clients['count']++;
     	socket.broadcast.emit('message', full_name + ' has connected.');
+        socket.broadcast.emit('clientsChanged', clients);
     });
 
     socket.on('message', function(message) {
         console.log('Received message:', message);
         socket.broadcast.emit('message', message);
     });
+});
+
+io.on('disconnect', function() {
+    clients['count']--;
+    socket.broadcast.emit('message', 'Someone has disconnected.');
+    io.emit('clientsChanged', clients);
 });
 
 server.listen(process.env.PORT || 8080);
