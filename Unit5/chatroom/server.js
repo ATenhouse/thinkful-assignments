@@ -26,6 +26,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function() {
+        console.log("Someone has disconnected.");
         clients.count = clients.count - 1;
         socket.broadcast.emit('message', 'Someone has disconnected.');
         io.emit('clientsChanged', clients);
