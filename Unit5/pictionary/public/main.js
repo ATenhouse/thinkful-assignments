@@ -18,8 +18,10 @@ var pictionary = function() {
     
     guessBox.on('keydown', onKeyDown);
     
-    var addGuess = function(guess) {
-      $("#guesses").text(guess);
+    var guesses = $('#guesses');
+
+    var makeGuess = function(guess) {
+      guesses.text(guess);
     };
 
     var draw = function(position) {
