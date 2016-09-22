@@ -29,6 +29,10 @@ border: 1px #C7CACD solid;
 display: block;
 margin: 0 auto;
 }
+#words {
+border: 1px solid black;
+width: 40%;
+}
 </style>
 <!-- JS -->
 <script src="//code.jquery.com/jquery-2.1.0.js"></script>
@@ -37,5 +41,12 @@ margin: 0 auto;
 <script src="main.js"></script>
 <div id="main">
     <h1>Pictionary</h1>
+    <div id="top-message">
+        <div id="guess">
+            Make a guess: <input type="text">
+        </div>
+        <div id="guesses"></div>
+    </div>
     <canvas id="canvas"></canvas>
+    <div id="words"></div>
 </div>
