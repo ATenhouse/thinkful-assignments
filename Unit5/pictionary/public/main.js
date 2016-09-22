@@ -36,7 +36,8 @@ var pictionary = function() {
               socket.emit('selection', guessVal);
               $('#words').html(guessVal);
             } else {
-              alert("Be sure to select a matching word from the list");
+                var random_word = WORDS[Math.floor(Math.random()*WORDS.length)];
+                alert("Be sure to select a matching word from the list. I suggest " + random_word);
             }
           }
         guessBox.val('');
