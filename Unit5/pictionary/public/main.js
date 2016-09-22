@@ -55,7 +55,7 @@ var pictionary = function() {
     canvas[0].height = canvas[0].offsetHeight;
     
     canvas.on('mousemove', function(event) {
-        if(!drawing) {
+        if(!drawing || socket.role == "guesser") {
             return
         }
         var offset = canvas.offset();

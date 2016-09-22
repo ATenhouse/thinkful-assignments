@@ -7,9 +7,22 @@ app.use(express.static('public'));
 
 var server = http.Server(app);
 var io = socket_io(server);
+var num_of_connections = 0;
+
+var clients = [];
 
 io.on('connection', function(socket){
     console.log('Client connected');
+    num_of_connections++;
+    clients.push(socket);
+    if (num_of_connections == 1) {
+      socket.role = 'drawer';
+      socket.emit("drawer");
+    } else {
+      socket.role = 'guesser';
+      socket.emit('guesser');
+    }
+    
     socket.on('draw', function(position) {
       socket.broadcast.emit('draw', position);
     });
