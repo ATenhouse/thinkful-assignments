@@ -4,24 +4,24 @@ var pictionary = function() {
     // defaulting to false ...
     var drawing = false;
     
-    var guessBox = $('#guess input');
+    var guessBox = $('#guessInput');
 
     var onKeyDown = function(event) {
         if (event.keyCode != 13) { // Enter
             return;
+        } else {
+            console.log(guessBox.val());
+            socket.emit('guess', guessBox.val());
         }
-    
-        console.log(guessBox.val());
-        socket.emit('guess', guessBox.val());
         guessBox.val('');
-    };
+    }
     
     guessBox.on('keydown', onKeyDown);
     
-    var guesses = $('#guesses');
+    var guess_div = $('#guesses');
 
     var makeGuess = function(guess) {
-      guesses.text(guess);
+      guess_div.text(guess);
     };
 
     var draw = function(position) {

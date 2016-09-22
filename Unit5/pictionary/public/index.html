@@ -39,14 +39,16 @@ width: 40%;
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="main.js"></script>
+
 <div id="main">
     <h1>Pictionary</h1>
-    <div id="top-message">
-        <div id="guess">
-            Make a guess: <input type="text">
-        </div>
-        <div id="guesses"></div>
-    </div>
+    <div id="roles"></div>
+  <div id="top-message">
+      <div id="guess">
+          <span>Make a guess:</span> <input type="text" id="guessInput">
+      </div>
+      <div id="guesses"></div>
+  </div>
     <canvas id="canvas"></canvas>
-    <div id="words"></div>
+      <div id="words"></div>
 </div>
