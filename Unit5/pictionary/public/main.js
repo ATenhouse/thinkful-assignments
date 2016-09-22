@@ -28,10 +28,19 @@ var pictionary = function() {
         if (event.keyCode != 13) { // Enter
             return;
         } else {
-            console.log(guessBox.val());
+          if(socket.role == 'guesser') {
             socket.emit('guess', guessBox.val());
-        }
+          } else { //drawer
+            var guessVal = guessBox.val();
+            if(WORDS.indexOf(guessVal) > -1) {
+              socket.emit('selection', guessVal);
+              $('#words').html(guessVal);
+            } else {
+              alert("Be sure to select a matching word from the list");
+            }
+          }
         guessBox.val('');
+      }
     };
     
     guessBox.on('keydown', onKeyDown);
@@ -39,6 +48,9 @@ var pictionary = function() {
     var guess_div = $('#guesses');
 
     var makeGuess = function(guess) {
+        if(words.indexOf(guess) > -1){
+            guess-div.text("SUCCESS!");
+        }
       guess_div.text(guess);
     };
 
@@ -95,7 +107,6 @@ var pictionary = function() {
     socket.on('guess', makeGuess);
     socket.on('drawer', assignDraw);
     socket.on('guesser', assignGuess);
-    
 };
 
 $(document).ready(function() {

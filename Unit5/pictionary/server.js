@@ -5,6 +5,7 @@ var socket_io = require('socket.io');
 var app = express();
 app.use(express.static('public'));
 
+var word = ""
 var server = http.Server(app);
 var io = socket_io(server);
 var num_of_connections = 0;
@@ -27,10 +28,19 @@ io.on('connection', function(socket){
       socket.broadcast.emit('draw', position);
     });
     socket.on('guess', function(guess) {
-      socket.broadcast.emit('guess', guess);
+      if (guess == word) {
+        socket.role = 'drawer';
+        socket.emit('drawer');
+        socket.broadcast.emit('guesser');
+      } else {
+        socket.broadcast.emit('guess', guess);
+      }
     });
     socket.on('disconnect', function() {
         console.log('A user has disconnected');
+    });
+    socket.on('selection', function(selection) {
+      word = selection;
     });
 });
 
